@@ -1,8 +1,46 @@
-﻿
+﻿@model AppProduto.ViewModels.ProdutoViewModel
+
+@using AppProduto.Models
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+
 }
 
-<h2>Index</h2>
+@{ 
+    string nomeCriador = ViewBag.CriadoPor;
 
+    List<Produto> _listaProdutos = (List<Produto>)ViewBag.ListaDeProdutos;
+}
+
+<h2>Protudos</h2>
+<br />
+Criado por @nomeCriador
+<br />
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Data de cadastro</th>
+            <th scope="col">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var produto in Model.produtos)
+        {
+            <tr>
+                <td>@produto.Id</td>
+                <td>@produto.Name</td>
+                <td>@produto.Description</td>
+                <td>@produto.Type</td>
+                <td>@produto.DateAdd.ToString("dd/MM/yyyy")</td>
+                <td><a href="/Produtos/Editar/@produto.Id">Editar</a> | <a href="/Produtos/Deletar/@produto.Id">Deletar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
