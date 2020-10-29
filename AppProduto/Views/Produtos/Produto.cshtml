@@ -1,0 +1,17 @@
+﻿@model AppProduto.Models.Produto
+
+@{
+    ViewBag.Title = "Produto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Produto</h2>
+@if (Model.Id == 2)
+{
+    <text><h3 style="color: red">Produto inválido!</h3></text>
+}
+else
+{
+    <h3>Codigo produto: @Model.Id</h3>
+    <h3>Nome produto: @Model.Name</h3>
+}
