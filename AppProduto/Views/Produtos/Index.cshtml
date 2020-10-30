@@ -1,4 +1,4 @@
-﻿@model AppProduto.ViewModels.ProdutoViewModel
+﻿@model List<AppProduto.Models.Produto>
 
 @using AppProduto.Models
 
@@ -19,6 +19,8 @@
 <br />
 Criado por @nomeCriador
 <br />
+<br />
+<a href="@Url.Action("novoproduto", "produtos")">Novo Produto</a>
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -31,7 +33,7 @@ Criado por @nomeCriador
         </tr>
     </thead>
     <tbody>
-        @foreach (var produto in Model.produtos)
+        @foreach (var produto in Model)
         {
             <tr>
                 <td>@produto.Id</td>
@@ -39,7 +41,7 @@ Criado por @nomeCriador
                 <td>@produto.Description</td>
                 <td>@produto.Type</td>
                 <td>@produto.DateAdd.ToString("dd/MM/yyyy")</td>
-                <td><a href="/Produtos/Editar/@produto.Id">Editar</a> | <a href="/Produtos/Deletar/@produto.Id">Deletar</a></td>
+                <td><a href="/produtos/editarproduto/@produto.Id">Editar</a> | <a href="/produtos/deletarproduto/@produto.Id">Deletar</a></td>
             </tr>
         }
     </tbody>

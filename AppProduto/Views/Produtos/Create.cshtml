@@ -1,0 +1,50 @@
+﻿@model AppProduto.Models.Produto
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Novo Produto</h2>
+
+@*<form action="/novoproduto/produtos" method="post">
+        <div class="form-group">
+            <label for="nomeProduto">Nome</label>
+            <input type="text" name="Name" class="form-control" id="nomeProduto">
+        </div>
+        <div class="form-group">
+            <label for="descProduto">Descrição</label>
+            <input type="text" name="Description" class="form-control" id="descProduto" placeholder="Capacidade de...">
+        </div>
+        <div class="form-group">
+            <label for="tipoProduto">Tipo</label>
+            <input type="number" name="Type" class="form-control" id="tipoProduto">
+        </div>
+        <div class="form-group">
+            <label for="dataCadProduto">Data Cadastro</label>
+            <input type="date" name="DateAdd" class="form-control" id="dataCadProduto">
+        </div>
+        <button type="submit" class="btn btn-success">Salvar</button>
+    </form>*@
+
+
+@using (Html.BeginForm("novoproduto", "produtos", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Name, "Nome")
+        @Html.TextBoxFor(_produto => _produto.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Description, "Descrição")
+        @Html.TextBoxFor(_produto => _produto.Description, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Type, "Tipo")
+        @Html.TextBoxFor(_produto => _produto.Type, new { @class = "form-control", @type="number" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.DateAdd, "Data Cadastro")
+        @Html.TextBoxFor(_produto => _produto.DateAdd, new { @class = "form-control", @type = "date" })
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+}

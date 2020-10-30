@@ -1,0 +1,33 @@
+﻿@model AppProduto.Models.Produto
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar Produto</h2>
+
+@using (Html.BeginForm("editarproduto", "produtos", FormMethod.Post))
+{
+    @Html.HiddenFor(_produto => _produto.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Name, "Nome")
+        @Html.TextBoxFor(_produto => _produto.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Description, "Descrição")
+        @Html.TextBoxFor(_produto => _produto.Description, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.Type, "Tipo")
+        @Html.TextBoxFor(_produto => _produto.Type, new { @class = "form-control", @type = "number" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(_produto => _produto.DateAdd, "Data Cadastro")
+        @Html.TextBoxFor(_produto => _produto.DateAdd, new { @class = "form-control", @type = "date" })
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+}
+
+

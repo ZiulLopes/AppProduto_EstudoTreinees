@@ -47,19 +47,65 @@ namespace AppProduto.Controllers
             ViewBag.CriadoPor = "Luiz";
             ViewBag.ListaDeProdutos = produtos;
 
-            var _produtosETipoProdutos = new ProdutoViewModel() { 
-                produtos = produtos,
-                tipoProdutos = tipo_produtos
-            };
+            //var _produtosETipoProdutos = new ProdutoViewModel() { 
+            //    produtos = produtos,
+            //    tipoProdutos = tipo_produtos
+            //};
 
-            return View(_produtosETipoProdutos);
+            return View(produtos);
         }
 
-        [Route("produtos/liberado/{year}/{month}")]
-        public ActionResult Liberado(int year, int month)
+        [Route("produtos/novoproduto")]
+        public ActionResult Create()
         {
-            return Content(year + "/" + month);
+            return View();
         }
+
+        [HttpPost]
+        [Route("produtos/novoproduto")]
+        public ActionResult Create(Produto produto)
+        {
+            produto.Id = IdMaisUm();
+            produtos.Add(produto);
+            return RedirectToAction("index");
+        }
+
+        [Route("produtos/editarproduto/{id}")]
+        public ActionResult Edit(int id)
+        {
+            var produto = produtos.Where(_produto => _produto.Id == id).FirstOrDefault();
+
+            if (produto != null)
+            {
+                return View(produto);
+            }
+
+            return RedirectToAction("index");
+        }
+
+        [HttpPost]
+        [Route("produtos/editarproduto")]
+        public ActionResult Edit(Produto produto)
+        {
+            produtos[produto.Id - 1] = produto;
+            return RedirectToAction("index");
+        }
+
+
+        [Route("produtos/deletarproduto/{id}")]
+        public ActionResult Delete(int id)
+        {
+            var produto = produtos.Where(_produto => _produto.Id == id).FirstOrDefault();
+
+            if (produto != null)
+            {
+                produtos.Remove(produto);
+            }
+
+            return RedirectToAction("index");
+        }
+
+
 
         [HttpGet]
         public ActionResult Produto()
@@ -73,6 +119,19 @@ namespace AppProduto.Controllers
         public ActionResult Deletar(int id)
         {
             return View();
+        }
+
+
+        [Route("produtos/liberado/{year}/{month}")]
+        public ActionResult Liberado(int year, int month)
+        {
+            return Content(year + "/" + month);
+        }
+    
+    
+        public int IdMaisUm()
+        {
+            return produtos.Count() + 1;
         }
     }
 }
