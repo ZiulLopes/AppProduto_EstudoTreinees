@@ -3,6 +3,7 @@ using AppProduto.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,49 +11,23 @@ namespace AppProduto.Controllers
 {
     public class ProdutosController : Controller
     {
-        private static List<Produto> produtos = new List<Produto>()
-        {
-            new Produto()
-            {
-                Id = 1,
-                Name = "Computador",
-                Description = "",
-                Type = 1,
-                DateAdd = DateTime.Now.AddDays(-1)
-            },
-            new Produto()
-            {
-                Id = 2,
-                Name = "Teclado",
-                Description = "",
-                Type = 1,
-                DateAdd = DateTime.Now.AddDays(-1)
-            },
-            new Produto()
-            {
-                Id = 3,
-                Name = "Monitor",
-                Description = "",
-                Type = 1,
-                DateAdd = DateTime.Now.AddDays(-1)
-            }
-        };
+        private readonly DataContext _dbContext;
 
-        private static List<TipoProduto> tipo_produtos = new List<TipoProduto>() { };
+        public ProdutosController()
+        {
+            _dbContext = new DataContext();
+        }
+
 
         // GET: Produtos
         public ActionResult Index()
         {
             ViewData["NomeModulo"] = "Produtos";
             ViewBag.CriadoPor = "Luiz";
-            ViewBag.ListaDeProdutos = produtos;
 
-            //var _produtosETipoProdutos = new ProdutoViewModel() { 
-            //    produtos = produtos,
-            //    tipoProdutos = tipo_produtos
-            //};
+            var _produtos = _dbContext.Produto.ToList();
 
-            return View(produtos);
+            return View(_produtos);
         }
 
         [Route("produtos/novoproduto")]
@@ -65,15 +40,20 @@ namespace AppProduto.Controllers
         [Route("produtos/novoproduto")]
         public ActionResult Create(Produto produto)
         {
-            produto.Id = IdMaisUm();
-            produtos.Add(produto);
+            _dbContext.Produto.Add(produto);
+            _dbContext.SaveChanges();
             return RedirectToAction("index");
         }
 
         [Route("produtos/editarproduto/{id}")]
         public ActionResult Edit(int id)
         {
-            var produto = produtos.Where(_produto => _produto.Id == id).FirstOrDefault();
+            var produto = _dbContext.Produto.Where(x => x.Id == id).FirstOrDefault();
+
+            var prodTo = (from x in _dbContext.Produto 
+                         where x.Id == id
+                         select x).FirstOrDefault();
+
 
             if (produto != null)
             {
@@ -83,11 +63,21 @@ namespace AppProduto.Controllers
             return RedirectToAction("index");
         }
 
+
         [HttpPost]
         [Route("produtos/editarproduto")]
         public ActionResult Edit(Produto produto)
         {
-            produtos[produto.Id - 1] = produto;
+            var _produto = _dbContext.Produto.Where(p => p.Id == produto.Id).FirstOrDefault();
+
+            if (produto != null)
+            {
+                _produto.Name = produto.Name;
+                _produto.Description = produto.Description;
+                _produto.Type = produto.Type;
+                _produto.DateAdd = produto.DateAdd;
+                _dbContext.SaveChanges();
+            }
             return RedirectToAction("index");
         }
 
@@ -95,11 +85,12 @@ namespace AppProduto.Controllers
         [Route("produtos/deletarproduto/{id}")]
         public ActionResult Delete(int id)
         {
-            var produto = produtos.Where(_produto => _produto.Id == id).FirstOrDefault();
+            var produto = _dbContext.Produto.Where(_produto => _produto.Id == id).FirstOrDefault();
 
             if (produto != null)
             {
-                produtos.Remove(produto);
+                _dbContext.Produto.Remove(produto);
+                _dbContext.SaveChanges();
             }
 
             return RedirectToAction("index");
@@ -126,12 +117,6 @@ namespace AppProduto.Controllers
         public ActionResult Liberado(int year, int month)
         {
             return Content(year + "/" + month);
-        }
-    
-    
-        public int IdMaisUm()
-        {
-            return produtos.Count() + 1;
         }
     }
 }
