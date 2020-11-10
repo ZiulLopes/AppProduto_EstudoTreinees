@@ -12,5 +12,7 @@ namespace AppProduto.Models
         public string Description { get; set; }
         public int Type { get; set; }
         public DateTime DateAdd { get; set; }
+
+        public TipoProduto TipoProduto { get; set; }
     }
 }

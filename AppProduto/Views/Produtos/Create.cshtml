@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var tiposProdutos = (List<AppProduto.Models.TipoProduto>)ViewBag.TiposProduto;
+
 }
 
 <h2>Novo Produto</h2>
@@ -38,9 +41,19 @@
         @Html.LabelFor(_produto => _produto.Description, "Descrição")
         @Html.TextBoxFor(_produto => _produto.Description, new { @class = "form-control" })
     </div>
-    <div class="form-group">
+    @*<div class="form-group">
         @Html.LabelFor(_produto => _produto.Type, "Tipo")
         @Html.TextBoxFor(_produto => _produto.Type, new { @class = "form-control", @type="number" })
+    </div>*@
+    <div class="form-group">
+        <label for="Type">Tipo Produto</label>
+        <select class="form-control" name="Type" id="Type">
+            <option value="0">Selecione...</option>
+            @foreach (var tipoproduto in tiposProdutos)
+            {
+                <option value="@tipoproduto.IdTipoPrdto">@tipoproduto.NomeTipoProduto</option>
+            }
+        </select>
     </div>
     <div class="form-group">
         @Html.LabelFor(_produto => _produto.DateAdd, "Data Cadastro")

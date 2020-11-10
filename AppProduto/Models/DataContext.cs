@@ -26,6 +26,10 @@ namespace AppProduto.Models
             modelBuilder.Entity<Produto>().Property(p => p.Type).HasColumnType("int").HasColumnName("IDTIPOPRODUTO").IsRequired();
             modelBuilder.Entity<Produto>().Property(p => p.DateAdd).HasColumnType("date").HasColumnName("DATACADASTRO").IsRequired();
 
+            // RELACIONAMENTO FOREIGN KEY
+            modelBuilder.Entity<Produto>().HasRequired<TipoProduto>(s => s.TipoProduto).WithMany(p => p.Produto).HasForeignKey<int>(s => s.Type);
+
+
             // MAPEAR TB TIPO PRODUTOS
             modelBuilder.Entity<TipoProduto>().ToTable("TB_TIPO_PRODUTO");
             modelBuilder.Entity<TipoProduto>().HasKey(tp => tp.IdTipoPrdto);

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace AppProduto.Controllers
 {
@@ -25,7 +26,7 @@ namespace AppProduto.Controllers
             ViewData["NomeModulo"] = "Produtos";
             ViewBag.CriadoPor = "Luiz";
 
-            var _produtos = _dbContext.Produto.ToList();
+            var _produtos = _dbContext.Produto.Include(p => p.TipoProduto).ToList();
 
             return View(_produtos);
         }
@@ -33,6 +34,8 @@ namespace AppProduto.Controllers
         [Route("produtos/novoproduto")]
         public ActionResult Create()
         {
+            ViewBag.TiposProduto = _dbContext.TipoProduto.ToList();
+
             return View();
         }
 
