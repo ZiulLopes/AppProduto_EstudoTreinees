@@ -13,6 +13,12 @@
     string nomeCriador = ViewBag.CriadoPor;
 
     List<Produto> _listaProdutos = (List<Produto>)ViewBag.ListaDeProdutos;
+
+    int quantProdutos = (int)ViewBag.QuantidadeProdutos;
+
+    int pageItens = quantProdutos % 3 == 0 ? quantProdutos / 3 : (quantProdutos / 3 + 1);
+
+    int paginaAtual = Convert.ToInt32(Request.QueryString["page"] ?? "1");
 }
 
 <h2>Protudos</h2>
@@ -35,14 +41,22 @@ Criado por @nomeCriador
     <tbody>
         @foreach (var produto in Model)
         {
-            <tr>
+            <tr id="linha_tabela_@produto.Id">
                 <td>@produto.Id</td>
                 <td>@produto.Name</td>
                 <td>@produto.Description</td>
                 <td>@produto.TipoProduto.NomeTipoProduto</td>
                 <td>@produto.DateAdd.ToString("dd/MM/yyyy")</td>
-                <td><a href="/produtos/editarproduto/@produto.Id">Editar</a> | <a href="/produtos/deletarproduto/@produto.Id">Deletar</a></td>
+                <td><a href="/produtos/editarproduto/@produto.Id">Editar</a> | <a href="#" onclick="DeletarProduto(@produto.Id)">Deletar</a></td>
             </tr>
         }
     </tbody>
 </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @for (int count = 1; count <= pageItens; count++)
+        {
+            <li class="page-item @(paginaAtual == count ? "active" : "")"><a class="page-link" href="@Url.Action("Index", "Produtos", new { page = count })">@count</a></li>
+        }
+    </ul>
+</nav>

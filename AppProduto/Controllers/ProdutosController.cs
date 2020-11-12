@@ -13,6 +13,7 @@ namespace AppProduto.Controllers
     public class ProdutosController : Controller
     {
         private readonly DataContext _dbContext;
+        private readonly int itensPorPagina = 3;
 
         public ProdutosController()
         {
@@ -21,14 +22,23 @@ namespace AppProduto.Controllers
 
 
         // GET: Produtos
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
             ViewData["NomeModulo"] = "Produtos";
             ViewBag.CriadoPor = "Luiz";
 
-            var _produtos = _dbContext.Produto.Include(p => p.TipoProduto).ToList();
+            ViewBag.QuantidadeProdutos = _dbContext.Produto.Count();
 
-            return View(_produtos);
+            IQueryable<Produto> _produtos;
+
+            _produtos = _dbContext.Produto
+                .Include(p => p.TipoProduto)
+                .OrderBy(p => p.Id)
+                .Skip(itensPorPagina * (page - 1))
+                .Take(itensPorPagina);
+
+
+            return View(_produtos.ToList());
         }
 
         [Route("produtos/novoproduto")]
